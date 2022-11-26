@@ -16,7 +16,6 @@ const getCreateNewUserPage = (req, res) => {
 
 const createNewUser = async (req, res) => {
     const message = await CRUDservice.createNewUser(req.body);
-    console.log(message);
     res.redirect('/store/users');
 }
 
