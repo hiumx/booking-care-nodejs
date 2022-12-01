@@ -175,6 +175,28 @@ const handleDeleteUser = (userId) => {
     })
 }
 
+const getAllCodeService = (typeInput) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!typeInput) {
+                resolve({
+                    errorCode: 1,
+                    message: 'Missing parameter !'
+                })
+            }
+            const response = await db.Allcode.findAll({
+                where: { type: typeInput }
+            })
+            resolve({
+                errorCode: 0,
+                data: response
+            })
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+
 module.exports = {
-    handleUserLogin, getUsers, handleCreateNewUser, handleEditUser, handleDeleteUser
+    handleUserLogin, getUsers, handleCreateNewUser, handleEditUser, handleDeleteUser, getAllCodeService
 }

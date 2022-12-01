@@ -65,6 +65,18 @@ const deleteUser = async (req, res) => {
     })
 }
 
+const handleGetAllCode = async (req, res) => {
+    try {
+        const data = await userService.getAllCodeService(req.query.type)
+        return res.status(200).json(data)
+    } catch (error) {
+        return res.status(200).json({
+            errorCode: -1,
+            message: 'Error from data base!'
+        })
+    }
+}
+
 module.exports = {
-    handleLogin, handleGetUsers, createNewUser, editUser, deleteUser
+    handleLogin, handleGetUsers, createNewUser, editUser, deleteUser, handleGetAllCode
 }

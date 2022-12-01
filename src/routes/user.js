@@ -9,4 +9,6 @@ router.post('/users/create', apiController.createNewUser)
 router.put('/users/edit', apiController.editUser)
 router.delete('/users/delete', apiController.deleteUser)
 
+router.get('/allcode', apiController.handleGetAllCode)
+
 module.exports = router;
