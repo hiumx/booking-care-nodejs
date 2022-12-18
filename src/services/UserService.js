@@ -10,7 +10,7 @@ const handleUserLogin = (email, password) => {
             if (isExist) {
                 const user = await db.User.findOne({
                     where: { email: email },
-                    attributes: ['email', 'roleId', 'password'],
+                    attributes: ['email', 'roleId', 'password', 'firstName', 'lastName'],
                     raw: true
                 })
 
@@ -105,7 +105,7 @@ const handleHashUserPassword = (password) => {
 const handleCreateNewUser = (userData) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const { email, password, firstName, lastName, address, phoneNumber, gender, roleId } = userData;
+            const { email, password, firstName, lastName, address, phoneNumber, gender, roleId, positionId, image } = userData;
             const isEmailExist = await checkUserEmail(email)
             if (isEmailExist) {
                 resolve({
@@ -121,8 +121,10 @@ const handleCreateNewUser = (userData) => {
                     lastName,
                     address,
                     phoneNumber,
-                    gender: gender === '1' ? true : false,
+                    gender,
                     roleId,
+                    positionId,
+                    image,
                 })
                 resolve({
                     errorCode: 0,
