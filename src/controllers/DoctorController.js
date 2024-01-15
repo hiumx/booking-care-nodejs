@@ -30,7 +30,7 @@ const getAllDoctor = async (req, res) => {
 
 const saveDetailDoctor = async (req, res) => {
     try {
-        const response = await doctorService.saveDetailDoctorService(req.body)
+        const response = await doctorService.createDetailDoctorService(req.body)
         res.status(200).json(response)
     } catch (error) {
         console.log(error);
@@ -40,6 +40,21 @@ const saveDetailDoctor = async (req, res) => {
         })
     }
 }
+
+const updateDetailDoctor = async (req, res) => {
+    try {
+        const response = await doctorService.updateDetailDoctorService(req.body)
+        res.status(200).json(response)
+    } catch (error) {
+        console.log(error);
+        res.status(200).json({
+            errorCode: -1,
+            message: 'Error from server...!'
+        })
+    }
+}
+
+
 
 const getInfoDoctorById = async (req, res) => {
     try {
@@ -56,5 +71,5 @@ const getInfoDoctorById = async (req, res) => {
 }
 
 module.exports = {
-    getTopDoctorHome, getAllDoctor, saveDetailDoctor, getInfoDoctorById
+    getTopDoctorHome, getAllDoctor, saveDetailDoctor, getInfoDoctorById, updateDetailDoctor
 }

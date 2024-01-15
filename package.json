@@ -4,12 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon src/index",
+    "start": "nodemon --inspect --exec babel-node src/index",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "hieu",
   "license": "ISC",
   "dependencies": {
+    "@babel/core": "^7.23.7",
+    "@babel/node": "^7.22.19",
+    "@babel/preset-env": "^7.23.8",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",

@@ -27,6 +27,8 @@ const getTopDoctorHome = (limit) => {
     })
 }
 
+
+
 const getAllDoctor = () => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -48,24 +50,53 @@ const getAllDoctor = () => {
     })
 }
 
-const saveDetailDoctorService = (data) => {
+const createDetailDoctorService = ({ contentMarkdown, contentHTML, description, doctorId }) => {
     return new Promise(async (resolve, reject) => {
         try {
-            if (!data.doctorId || !data.contentMarkdown || !data.contentHTML) {
+            if (!doctorId || !contentMarkdown || !contentHTML) {
                 resolve({
                     errorCode: 1,
                     message: 'Missing parameter!'
                 })
             }
             await db.Markdown.create({
-                contentMarkdown: data.contentMarkdown,
-                contentHTML: data.contentHTML,
-                description: data.description,
-                doctorId: data.doctorId
+                contentMarkdown,
+                contentHTML,
+                description,
+                doctorId
             })
             resolve({
                 errorCode: 0,
-                message: 'Save information doctor success'
+                message: 'Create information doctor success'
+            })
+        } catch (error) {
+            console.log(error);
+            reject(e)
+        }
+    })
+}
+
+const updateDetailDoctorService = ({ contentMarkdown, contentHTML, description, doctorId }) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!doctorId || !contentMarkdown || !contentHTML) {
+                resolve({
+                    errorCode: 1,
+                    message: 'Missing parameter!'
+                })
+            }
+            await db.Markdown.update({
+                contentMarkdown,
+                contentHTML,
+                description
+            }, {
+                where: {
+                    doctorId
+                }
+            })
+            resolve({
+                errorCode: 0,
+                message: 'Update information doctor success'
             })
         } catch (error) {
             console.log(error);
@@ -112,5 +143,5 @@ const getInfoDoctorById = (inputId) => {
 }
 
 module.exports = {
-    getTopDoctorHome, getAllDoctor, saveDetailDoctorService, getInfoDoctorById
+    getTopDoctorHome, getAllDoctor, createDetailDoctorService, getInfoDoctorById, updateDetailDoctorService
 }
