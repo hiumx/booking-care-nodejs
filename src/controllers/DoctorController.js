@@ -70,6 +70,24 @@ const getInfoDoctorById = async (req, res) => {
     }
 }
 
+const createDoctorSchedule = async (req, res) => {
+    try {
+        const response = await doctorService.createDoctorSchedule(req.body);
+        res.status(201).json({
+            message: response.message,
+            errorCode: response.code,
+            data: response.data
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: 'Something wrong from server!',
+            errorCode: -2,
+            data: ''
+        })
+    }
+}
+
 module.exports = {
-    getTopDoctorHome, getAllDoctor, saveDetailDoctor, getInfoDoctorById, updateDetailDoctor
+    getTopDoctorHome, getAllDoctor, saveDetailDoctor, getInfoDoctorById, updateDetailDoctor, createDoctorSchedule
 }

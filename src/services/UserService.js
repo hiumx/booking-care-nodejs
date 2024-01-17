@@ -183,13 +183,15 @@ const getAllCodeService = (typeInput) => {
             if (!typeInput) {
                 resolve({
                     errorCode: 1,
-                    message: 'Missing parameter !'
+                    message: 'Missing parameter !',
+                    data: ''
                 })
             }
             const response = await db.Allcode.findAll({
                 where: { type: typeInput }
             })
             resolve({
+                message: 'Get all code successfully',
                 errorCode: 0,
                 data: response
             })

@@ -1,4 +1,9 @@
-const db = require('../models/index')
+const db = require('../models/index');
+import dotenv from 'dotenv';
+import { Op, Sequelize } from 'sequelize';
+import _ from 'lodash';
+
+dotenv.config();
 
 const getTopDoctorHome = (limit) => {
     return new Promise(async (resolve, reject) => {
@@ -142,6 +147,66 @@ const getInfoDoctorById = (inputId) => {
     })
 }
 
+const createDoctorSchedule = async (doctorSchedule) => {
+    try {
+        const { doctorId, date, listTimeSelected } = doctorSchedule;
+        const dateFormat = new Date(date).getTime();
+
+        const schedule = listTimeSelected.map(time => ({
+            doctorId,
+            date: dateFormat,
+            maxNumber: process.env.MAX_DOCTOR_SCHEDULE,
+            currentNumber: listTimeSelected.length,
+            timeType: time.keyMap,
+        }));
+
+        const dateObj = new Date(date);
+        try {
+            const scheduleExit = await db.Schedule.findAll({
+                where: {
+                    [Op.and]: [
+                        Sequelize.where(Sequelize.fn('DAY', Sequelize.col('date')), dateObj.getDate()),
+                        Sequelize.where(Sequelize.fn('MONTH', Sequelize.col('date')), (dateObj.getMonth() + 1)),
+                        Sequelize.where(Sequelize.fn('YEAR', Sequelize.col('date')), dateObj.getFullYear()),
+                    ],
+                },
+                attributes: ['doctorId', 'date', 'maxNumber', 'currentNumber', 'timeType'],
+                raw: true
+            });
+
+            const newTimesList = _.differenceWith(schedule, scheduleExit, (a, b) => {
+                const dateObj = new Date(a.date);
+                return a.doctorId === b.doctorId 
+                && dateObj.getDate() === b.date.getDate() 
+                && dateObj.getMonth() === b.date.getMonth() 
+                && dateObj.getFullYear() === b.date.getFullYear() 
+                && a.timeType === b.timeType
+            });
+
+            await db.Schedule.bulkCreate(newTimesList);
+            return {
+                message: 'Create doctor schedule successfully',
+                code: 0,
+                data: ''
+            }
+        } catch (error) {
+            console.log(error);
+            return {
+                message: 'Something wrong from server!',
+                code: -1,
+                data: ''
+            }
+        }
+    } catch (error) {
+        console.log(error);
+        return {
+            message: 'Something wrong from server!',
+            code: -1,
+            data: ''
+        }
+    }
+}
+
 module.exports = {
-    getTopDoctorHome, getAllDoctor, createDetailDoctorService, getInfoDoctorById, updateDetailDoctorService
+    getTopDoctorHome, getAllDoctor, createDetailDoctorService, getInfoDoctorById, updateDetailDoctorService, createDoctorSchedule
 }

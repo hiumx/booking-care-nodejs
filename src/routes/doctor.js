@@ -8,5 +8,6 @@ router.get('/get-all-doctor', doctorController.getAllDoctor)
 router.post('/save-detail-doctor', doctorController.saveDetailDoctor)
 router.put('/save-detail-doctor', doctorController.updateDetailDoctor)
 router.get('/get-info-doctor-by-id', doctorController.getInfoDoctorById)
+router.post('/create-doctor-schedule', doctorController.createDoctorSchedule)
 
 module.exports = router
