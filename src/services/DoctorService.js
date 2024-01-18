@@ -147,6 +147,27 @@ const getInfoDoctorById = (inputId) => {
     })
 }
 
+const checkScheduleExist = async (doctorId, date) => {
+    const dateObj = new Date(date);
+
+    try {
+        return await db.Schedule.findAll({
+            where: {
+                [Op.and]: [
+                    Sequelize.where(Sequelize.fn('DAY', Sequelize.col('date')), dateObj.getDate()),
+                    Sequelize.where(Sequelize.fn('MONTH', Sequelize.col('date')), (dateObj.getMonth() + 1)),
+                    Sequelize.where(Sequelize.fn('YEAR', Sequelize.col('date')), dateObj.getFullYear()),
+                ],
+                doctorId
+            },
+            attributes: ['doctorId', 'date', 'timeType', 'timeTypeId'],
+            raw: true
+        });
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 const createDoctorSchedule = async (doctorSchedule) => {
     try {
         const { doctorId, date, listTimeSelected } = doctorSchedule;
@@ -158,29 +179,19 @@ const createDoctorSchedule = async (doctorSchedule) => {
             maxNumber: process.env.MAX_DOCTOR_SCHEDULE,
             currentNumber: listTimeSelected.length,
             timeType: time.keyMap,
+            timeTypeId: time.timeId
         }));
 
-        const dateObj = new Date(date);
         try {
-            const scheduleExit = await db.Schedule.findAll({
-                where: {
-                    [Op.and]: [
-                        Sequelize.where(Sequelize.fn('DAY', Sequelize.col('date')), dateObj.getDate()),
-                        Sequelize.where(Sequelize.fn('MONTH', Sequelize.col('date')), (dateObj.getMonth() + 1)),
-                        Sequelize.where(Sequelize.fn('YEAR', Sequelize.col('date')), dateObj.getFullYear()),
-                    ],
-                },
-                attributes: ['doctorId', 'date', 'maxNumber', 'currentNumber', 'timeType'],
-                raw: true
-            });
+            const scheduleExist = await checkScheduleExist(doctorId, date);
 
-            const newTimesList = _.differenceWith(schedule, scheduleExit, (a, b) => {
+            const newTimesList = _.differenceWith(schedule, scheduleExist, (a, b) => {
                 const dateObj = new Date(a.date);
-                return a.doctorId === b.doctorId 
-                && dateObj.getDate() === b.date.getDate() 
-                && dateObj.getMonth() === b.date.getMonth() 
-                && dateObj.getFullYear() === b.date.getFullYear() 
-                && a.timeType === b.timeType
+                return a.doctorId === b.doctorId
+                    && dateObj.getDate() === b.date.getDate()
+                    && dateObj.getMonth() === b.date.getMonth()
+                    && dateObj.getFullYear() === b.date.getFullYear()
+                    && a.timeType === b.timeType
             });
 
             await db.Schedule.bulkCreate(newTimesList);
@@ -207,6 +218,28 @@ const createDoctorSchedule = async (doctorSchedule) => {
     }
 }
 
-module.exports = {
-    getTopDoctorHome, getAllDoctor, createDetailDoctorService, getInfoDoctorById, updateDetailDoctorService, createDoctorSchedule
+const getScheduleDoctorByDate = async ({ doctorId, date }) => {
+
+    try {
+        const scheduleExist = await checkScheduleExist(doctorId, date);
+        return {
+            message: 'Get doctor schedule existed successfully',
+            code: 0,
+            data: scheduleExist
+        }
+    } catch (error) {
+        console.log(error);
+        return {
+            message: 'Something wrong from server!',
+            code: -1,
+            data: ''
+        }
+    }
+}
+
+export {
+    getTopDoctorHome, getAllDoctor,
+    createDetailDoctorService, getInfoDoctorById,
+    updateDetailDoctorService, createDoctorSchedule,
+    getScheduleDoctorByDate
 }

@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs')
 const salt = bcrypt.genSaltSync(10);
-const db = require('../models/index')
+const db = require('../models/index');
+const { Op } = require('sequelize');
 
 const handleUserLogin = (email, password) => {
     return new Promise(async (resolve, reject) => {
@@ -62,11 +63,13 @@ const checkUserEmail = (userEmail) => {
 
 
 
-const getUsers = (userId) => {
+const getUsers = (queryData) => {
+    const dataFind = queryData.id ? queryData.id : queryData.email;
+    
     return new Promise(async (resolve, reject) => {
         let data;
         try {
-            if (userId && userId === 'ALL') {
+            if (dataFind && dataFind === 'ALL') {
                 data = await db.User.findAll({
                     attributes: {
                         exclude: ['password']
@@ -74,10 +77,10 @@ const getUsers = (userId) => {
                 })
             }
 
-            if (userId && userId !== 'ALL') {
+            if (dataFind && dataFind !== 'ALL') {
                 data = await db.User.findOne({
                     where: {
-                        id: userId
+                        [Op.or]: [{id: dataFind}, {email: dataFind}]
                     },
                     attributes: {
                         exclude: ['password']

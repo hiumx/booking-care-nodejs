@@ -21,10 +21,9 @@ const handleLogin = async (req, res) => {
 }
 
 const handleGetUsers = async (req, res) => {
-    const id = req.query.id
-    const users = await userService.getUsers(id)
+    const users = await userService.getUsers(req.query)
 
-    if (!id) {
+    if (!req.query.id && !req.query.email) {
         res.status(200).json({
             errorCode: 1,
             message: 'Missing parameter input',

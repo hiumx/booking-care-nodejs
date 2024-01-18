@@ -1,6 +1,6 @@
 import * as markdownService from '../services/MarkdownService';
 
-const getInfoFromDoctorId = async (req, res) => {
+const getInfoDoctorMarkDown = async (req, res) => {
     const doctorId = req.params.id;
     try {
         const response = await markdownService.getInfoDoctorById(doctorId);
@@ -19,4 +19,4 @@ const getInfoFromDoctorId = async (req, res) => {
     }
 }
 
-export { getInfoFromDoctorId };
+export { getInfoDoctorMarkDown };

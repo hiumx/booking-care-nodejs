@@ -12,7 +12,7 @@ router.delete('/users/delete', apiController.deleteUser)
 
 router.get('/allcode', apiController.handleGetAllCode)
 
-router.get('/get-info-doctor/:id', markdownController.getInfoFromDoctorId);
+router.get('info-doctor-markdown/:id', markdownController.getInfoDoctorMarkDown);
 
 
 module.exports = router;

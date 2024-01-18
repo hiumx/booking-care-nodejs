@@ -21,6 +21,10 @@ module.exports = {
             timeType: {
                 type: Sequelize.STRING
             },
+            timeTypeId: {
+                type: Sequelize.INTEGER,
+                allowNull: false
+            },
             doctorId: {
                 type: Sequelize.INTEGER
             },
