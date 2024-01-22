@@ -12,7 +12,10 @@ router.delete('/users/delete', apiController.deleteUser)
 
 router.get('/allcode', apiController.handleGetAllCode)
 
-router.get('info-doctor-markdown/:id', markdownController.getInfoDoctorMarkDown);
+router.get('/info-doctor-markdown/:id', markdownController.getInfoDoctorMarkDown);
+router.get('/schedule-time-detail', apiController.getInfoTimeDetailById);
+
+router.get('/doctor-schedule', apiController.getDoctorSchedule);
 
 
 module.exports = router;

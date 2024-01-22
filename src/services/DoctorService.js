@@ -133,7 +133,7 @@ const getInfoDoctorById = (inputId) => {
                 })
                 let imageBase64;
                 if (data.image) {
-                    imageBase64 = new Buffer(data.image, 'base64').toString('binary');
+                    imageBase64 = Buffer.from(data.image, 'base64').toString('binary');
                     data.image = imageBase64
                 }
                 resolve({
@@ -154,7 +154,7 @@ const checkScheduleExist = async (doctorId, date) => {
         return await db.Schedule.findAll({
             where: {
                 [Op.and]: [
-                    Sequelize.where(Sequelize.fn('DAY', Sequelize.col('date')), dateObj.getDate()),
+                    Sequelize.where(Sequelize.fn('DAY', Sequelize.col('date')), dateObj.getDate() - 1),
                     Sequelize.where(Sequelize.fn('MONTH', Sequelize.col('date')), (dateObj.getMonth() + 1)),
                     Sequelize.where(Sequelize.fn('YEAR', Sequelize.col('date')), dateObj.getFullYear()),
                 ],

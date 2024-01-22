@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import db from "../models";
 
 const getInfoDoctorById = async (doctorId) => {
@@ -22,6 +23,7 @@ const getInfoDoctorById = async (doctorId) => {
         }
     }
 }
+
 
 export {
     getInfoDoctorById

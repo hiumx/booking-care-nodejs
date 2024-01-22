@@ -1,4 +1,5 @@
-const userService = require('../services/UserService')
+const userService = require('../services/UserService');
+import * as apiService from '../services/ApiService';
 
 const handleLogin = async (req, res) => {
     const email = req.body.email;
@@ -69,13 +70,47 @@ const handleGetAllCode = async (req, res) => {
         const data = await userService.getAllCodeService(req.query.type)
         return res.status(200).json(data)
     } catch (error) {
-        return res.status(200).json({
+        return res.status(500).json({
             errorCode: -1,
             message: 'Error from data base!'
+        });
+    }
+}
+
+const getDoctorSchedule = async (req, res) => {
+    try {
+        const response = await apiService.getDoctorSchedule(req.query);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            errorCode: -1,
+            message: 'Error from data base!'
+        });
+    }
+}
+
+const getInfoTimeDetailById = async (req, res) => {
+    const { listTimeIds } = req.query;
+    try {
+        const response = await apiService.getInfoTimeDetailById(listTimeIds);
+        res.status(200).json({
+            message: response.message,
+            code: response.code,
+            data: response.data
+        })
+    } catch (error) {
+        console.log(error);
+        res.json({
+            message: 'Something wrong from server!',
+            code: -2,
+            data: ''
         })
     }
 }
 
-module.exports = {
-    handleLogin, handleGetUsers, createNewUser, editUser, deleteUser, handleGetAllCode
+export {
+    handleLogin, handleGetUsers,
+     createNewUser, editUser,
+     deleteUser, handleGetAllCode,
+     getDoctorSchedule, getInfoTimeDetailById
 }
