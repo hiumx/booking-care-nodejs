@@ -10,7 +10,8 @@ router.post('/users/create', apiController.createNewUser)
 router.put('/users/edit', apiController.editUser)
 router.delete('/users/delete', apiController.deleteUser)
 
-router.get('/allcode', apiController.handleGetAllCode)
+router.get('/allcode', apiController.handleGetAllCode);
+router.get('/doctor-clinic/:id', apiController.getInfoClinicDoctor);
 
 router.get('/info-doctor-markdown/:id', markdownController.getInfoDoctorMarkDown);
 router.get('/schedule-time-detail', apiController.getInfoTimeDetailById);

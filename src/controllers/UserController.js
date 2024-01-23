@@ -108,9 +108,28 @@ const getInfoTimeDetailById = async (req, res) => {
     }
 }
 
+const getInfoClinicDoctor = async (req, res) => {
+    try {
+        const response = await apiService.getInfoClinicDoctor(req.params);
+        res.status(200).json({
+            message: response.message,
+            code: response.code,
+            data: response.data
+        })
+    } catch (error) {
+        console.log(error);
+        res.json({
+            message: 'Something wrong from server!',
+            code: -2,
+            data: ''
+        })
+    }
+}
+
 export {
     handleLogin, handleGetUsers,
      createNewUser, editUser,
      deleteUser, handleGetAllCode,
-     getDoctorSchedule, getInfoTimeDetailById
+     getDoctorSchedule, getInfoTimeDetailById,
+     getInfoClinicDoctor
 }

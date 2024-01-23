@@ -55,6 +55,30 @@ const getInfoTimeDetailById = async (timeIds) => {
     }
 }
 
+const getInfoClinicDoctor = async ({ id }) => {
+    try {
+        const res = await db.Doctor.findOne({
+            where: {
+                doctorId: +id
+            },
+            raw: true
+        });
+        return {
+            message: 'Get information doctor clinic successfully',
+            code: 0,
+            data: res
+        }
+    } catch (error) {
+        console.log(error);
+        return {
+            message: 'Something went wrong from get information clinic service!',
+            code: -1,
+            data: ''
+        }
+    }
+}
+
 export {
-    getDoctorSchedule, getInfoTimeDetailById
+    getDoctorSchedule, getInfoTimeDetailById,
+    getInfoClinicDoctor
 }

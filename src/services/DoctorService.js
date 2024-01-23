@@ -55,10 +55,24 @@ const getAllDoctor = () => {
     })
 }
 
-const createDetailDoctorService = ({ contentMarkdown, contentHTML, description, doctorId }) => {
+const createDetailDoctorService = (
+    {
+        contentMarkdown,
+        contentHTML,
+        description,
+        provinceId,
+        priceId,
+        paymentId,
+        addressClinic,
+        nameClinic,
+        noteClinic,
+        doctorId
+    }) => {
     return new Promise(async (resolve, reject) => {
         try {
-            if (!doctorId || !contentMarkdown || !contentHTML) {
+            if (!doctorId || !contentMarkdown || !contentHTML
+                || !provinceId || !priceId || !paymentId
+                || !addressClinic || !nameClinic || !noteClinic) {
                 resolve({
                     errorCode: 1,
                     message: 'Missing parameter!'
@@ -69,6 +83,16 @@ const createDetailDoctorService = ({ contentMarkdown, contentHTML, description, 
                 contentHTML,
                 description,
                 doctorId
+            })
+
+            await db.Doctor.create({
+                doctorId,
+                priceId,
+                provinceId,
+                paymentId,
+                nameClinic,
+                addressClinic,
+                note: noteClinic
             })
             resolve({
                 errorCode: 0,
@@ -81,10 +105,20 @@ const createDetailDoctorService = ({ contentMarkdown, contentHTML, description, 
     })
 }
 
-const updateDetailDoctorService = ({ contentMarkdown, contentHTML, description, doctorId }) => {
+const updateDetailDoctorService = ({
+    contentMarkdown,
+    contentHTML,
+    description,
+    provinceId,
+    priceId,
+    paymentId,
+    addressClinic,
+    nameClinic,
+    noteClinic,
+    doctorId }) => {
     return new Promise(async (resolve, reject) => {
         try {
-            if (!doctorId || !contentMarkdown || !contentHTML) {
+            if (!doctorId || !contentMarkdown || !contentHTML ) {
                 resolve({
                     errorCode: 1,
                     message: 'Missing parameter!'
@@ -94,6 +128,19 @@ const updateDetailDoctorService = ({ contentMarkdown, contentHTML, description, 
                 contentMarkdown,
                 contentHTML,
                 description
+            }, {
+                where: {
+                    doctorId
+                }
+            })
+
+            const res = await db.Doctor.update({
+                provinceId,
+                priceId,
+                paymentId,
+                addressClinic,
+                nameClinic,
+                note: noteClinic,
             }, {
                 where: {
                     doctorId

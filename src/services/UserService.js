@@ -65,7 +65,7 @@ const checkUserEmail = (userEmail) => {
 
 const getUsers = (queryData) => {
     const dataFind = queryData.id ? queryData.id : queryData.email;
-    
+
     return new Promise(async (resolve, reject) => {
         let data;
         try {
@@ -80,7 +80,7 @@ const getUsers = (queryData) => {
             if (dataFind && dataFind !== 'ALL') {
                 data = await db.User.findOne({
                     where: {
-                        [Op.or]: [{id: dataFind}, {email: dataFind}]
+                        [Op.or]: [{ id: dataFind }, { email: dataFind }]
                     },
                     attributes: {
                         exclude: ['password']
@@ -191,7 +191,8 @@ const getAllCodeService = (typeInput) => {
                 })
             }
             const response = await db.Allcode.findAll({
-                where: { type: typeInput }
+                where: { type: typeInput },
+                attributes: { exclude: ['createdAt', 'updatedAt'] }
             })
             resolve({
                 message: 'Get all code successfully',
