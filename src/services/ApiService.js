@@ -2,7 +2,6 @@ import { Op } from "sequelize";
 import db from "../models";
 
 const getDoctorSchedule = async ({ doctorId, date }) => {
-    console.log(date);
     try {
         // const res = await db.Schedule.findAll({
         //     where: {
@@ -78,7 +77,40 @@ const getInfoClinicDoctor = async ({ id }) => {
     }
 }
 
+const getDoctorClinicDetail = async ({ id }) => {
+    try {
+        const res = await db.Doctor.findOne({
+            where: {
+                doctorId: +id
+            },
+            attributes: {
+                exclude: ['id', 'doctorId', 'priceId', 'provinceId', 'paymentId']
+            },
+            include: [
+                { model: db.Allcode, as: 'provinceData', attributes: ['valueEn', 'valueVi'] },
+                { model: db.Allcode, as: 'priceData', attributes: ['keyMap', 'valueEn', 'valueVi'] },
+                { model: db.Allcode, as: 'paymentData', attributes: ['keyMap', 'valueEn', 'valueVi'] },
+            ],
+            raw: true,
+            nest: true
+        });
+        return {
+            message: 'Get doctor clinic detail successfully',
+            code: 0,
+            data: res
+        }
+
+    } catch (error) {
+        console.error(error);
+        return {
+            message: 'Something went wrong from get information clinic service!',
+            code: -1,
+            data: ''
+        }
+    }
+}
+
 export {
     getDoctorSchedule, getInfoTimeDetailById,
-    getInfoClinicDoctor
+    getInfoClinicDoctor, getDoctorClinicDetail
 }

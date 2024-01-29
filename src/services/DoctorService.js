@@ -2,6 +2,7 @@ const db = require('../models/index');
 import dotenv from 'dotenv';
 import { Op, Sequelize } from 'sequelize';
 import _ from 'lodash';
+import { sendEmailSimple } from './EmailService';
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ const getTopDoctorHome = (limit) => {
                 include: [
                     { model: db.Allcode, as: 'positionData', attributes: ['valueEn', 'valueVi'] },
                     { model: db.Allcode, as: 'genderData', attributes: ['valueEn', 'valueVi'] },
+                    { model: db.Doctor, attributes: ['nameClinic', 'addressClinic'] },
                 ],
                 raw: true,
                 nest: true
@@ -196,6 +198,9 @@ const getInfoDoctorById = (inputId) => {
 
 const checkScheduleExist = async (doctorId, date) => {
     const dateObj = new Date(date);
+    // console.log(date);
+    // console.log(dateObj);
+    // console.log(dateObj.getDate());
 
     try {
         return await db.Schedule.findAll({
@@ -240,7 +245,6 @@ const createDoctorSchedule = async (doctorSchedule) => {
                     && dateObj.getFullYear() === b.date.getFullYear()
                     && a.timeType === b.timeType
             });
-
             await db.Schedule.bulkCreate(newTimesList);
             return {
                 message: 'Create doctor schedule successfully',

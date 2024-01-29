@@ -4,6 +4,10 @@ const router = express.Router();
 const apiController = require('../controllers/UserController');
 import * as markdownController from '../controllers/MarkdownController';
 
+import patientRoutes from './patient';
+
+router.use('/patient', patientRoutes);
+
 router.post('/login', apiController.handleLogin)
 router.get('/users', apiController.handleGetUsers)
 router.post('/users/create', apiController.createNewUser)
@@ -12,6 +16,7 @@ router.delete('/users/delete', apiController.deleteUser)
 
 router.get('/allcode', apiController.handleGetAllCode);
 router.get('/doctor-clinic/:id', apiController.getInfoClinicDoctor);
+router.get('/doctor-clinic-detail/:id', apiController.getClinicDoctorDetail);
 
 router.get('/info-doctor-markdown/:id', markdownController.getInfoDoctorMarkDown);
 router.get('/schedule-time-detail', apiController.getInfoTimeDetailById);
