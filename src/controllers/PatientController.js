@@ -25,6 +25,24 @@ class PatientController {
             })
         }
     }
+
+    async verifySchedule(req, res, next) {
+        try {
+            const response = await PatientService.verifySchedule(req.query);
+            return res.status(201).json({
+                code: response.code,
+                message: response.message,
+                data: response.data
+            })
+        } catch (error) {
+            return res.json({
+                code: -2,
+                message: 'Something wrong form server!',
+                data: ''
+            })
+        }
+    }
 }
 
 export default new PatientController();
+ 

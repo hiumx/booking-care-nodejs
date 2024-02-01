@@ -28,7 +28,8 @@ module.exports = (sequelize, DataTypes) => {
     priceId: DataTypes.STRING,
     date: DataTypes.DATE,
     timeType: DataTypes.STRING,
-    reasonExamine: DataTypes.STRING
+    reasonExamine: DataTypes.STRING,
+    verifyToken: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Booking',

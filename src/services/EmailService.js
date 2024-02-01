@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import moment from 'moment';
 dotenv.config();
 
-export const sendEmailSimple = async ({namePatient, emailPatient, nameDoctor, dateAppointment, time }) => {
+export const sendEmailSimple = async ({ doctorId, namePatient, emailPatient, nameDoctor, dateAppointment, time, verifyToken }) => {
 
   const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
@@ -20,7 +20,7 @@ export const sendEmailSimple = async ({namePatient, emailPatient, nameDoctor, da
     await transporter.sendMail({
       from: '"Booking Care 👻" <maixuanhieu250123@gmail.com>',
       to: emailPatient, // list of receivers
-      subject: "Xác nhận đặt lịch khám", 
+      subject: "Xác nhận đặt lịch khám",
       html: `<div>
         <h3 style='color: blue'>Xác nhận thông tin đặt lịch khám bệnh</h3>
         <p>Xin chào: <b>${namePatient}</b></p>
@@ -28,7 +28,7 @@ export const sendEmailSimple = async ({namePatient, emailPatient, nameDoctor, da
         <p>Bác sĩ: <b>${nameDoctor}</b></p>
         <p>Thời gian: <b>${time}</b></p>
         <p>Ngày: <b>${moment(dateAppointment).format('DD/MM/YYYY')}</b></p>
-        <p>Vui lòng click vào <i><a href='#' target="_blank">đây</a></i> để xác nhận để xác nhận thông tin lịch khám.</p>
+        <p>Vui lòng click vào <i><a href='${process.env.URL_REACT_APP}/verify-schedule?token=${verifyToken}&doctorId=${doctorId}' target="_blank">đây</a></i> để xác nhận để xác nhận thông tin lịch khám.</p>
         <p>Xin cảm ơn!</p>
       </div>`, // html body
     });

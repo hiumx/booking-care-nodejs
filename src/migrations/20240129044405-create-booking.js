@@ -36,6 +36,9 @@ module.exports = {
       reasonExamine: {
         type: Sequelize.STRING
       },
+      verifyToken: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
