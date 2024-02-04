@@ -5,8 +5,10 @@ const apiController = require('../controllers/UserController');
 import * as markdownController from '../controllers/MarkdownController';
 
 import patientRoutes from './patient';
+import specialtyRoutes from './specialty';
 
 router.use('/patient', patientRoutes);
+router.use('/specialty', specialtyRoutes);
 
 router.post('/login', apiController.handleLogin)
 router.get('/users', apiController.handleGetUsers)
