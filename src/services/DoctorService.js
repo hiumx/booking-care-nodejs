@@ -19,7 +19,7 @@ const getTopDoctorHome = (limit) => {
                 include: [
                     { model: db.Allcode, as: 'positionData', attributes: ['valueEn', 'valueVi'] },
                     { model: db.Allcode, as: 'genderData', attributes: ['valueEn', 'valueVi'] },
-                    { model: db.Doctor, attributes: ['nameClinic', 'addressClinic'] },
+                    { model: db.Clinic, attributes: ['nameClinic', 'addressClinic'] },
                 ],
                 raw: true,
                 nest: true
@@ -68,7 +68,8 @@ const createDetailDoctorService = (
         addressClinic,
         nameClinic,
         noteClinic,
-        doctorId
+        doctorId,
+        specialtyId
     }) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -80,22 +81,32 @@ const createDetailDoctorService = (
                     message: 'Missing parameter!'
                 })
             }
+            const [clinic, created] = await db.Clinic.findOrCreate({
+                where: {
+                    doctorId,
+                    provinceId,
+                    addressClinic,
+                    nameClinic
+                },
+                defaults: {
+                    priceId,
+                    paymentId,
+                    note: noteClinic
+                }
+            });
+
+            console.log(clinic);
+
+
             await db.Markdown.create({
                 contentMarkdown,
                 contentHTML,
                 description,
-                doctorId
+                doctorId,
+                specialtyId,
+                clinicId: clinic.id
             })
 
-            await db.Doctor.create({
-                doctorId,
-                priceId,
-                provinceId,
-                paymentId,
-                nameClinic,
-                addressClinic,
-                note: noteClinic
-            })
             resolve({
                 errorCode: 0,
                 message: 'Create information doctor success'
@@ -117,37 +128,43 @@ const updateDetailDoctorService = ({
     addressClinic,
     nameClinic,
     noteClinic,
-    doctorId }) => {
+    doctorId,
+    specialtyId
+}) => {
     return new Promise(async (resolve, reject) => {
         try {
-            if (!doctorId || !contentMarkdown || !contentHTML ) {
+
+            if (!doctorId || !contentMarkdown || !contentHTML) {
                 resolve({
                     errorCode: 1,
                     message: 'Missing parameter!'
                 })
             }
+            const [clinic, created] = await db.Clinic.findOrCreate({
+                where: {
+                    provinceId,
+                    addressClinic,
+                    nameClinic
+                },
+                defaults: {
+                    doctorId,
+                    priceId,
+                    paymentId,
+                    note: noteClinic
+                }
+            });
             await db.Markdown.update({
                 contentMarkdown,
                 contentHTML,
-                description
+                description,
+                clinicId: clinic.id,
+                specialtyId
             }, {
                 where: {
                     doctorId
                 }
             })
 
-            const res = await db.Doctor.update({
-                provinceId,
-                priceId,
-                paymentId,
-                addressClinic,
-                nameClinic,
-                note: noteClinic,
-            }, {
-                where: {
-                    doctorId
-                }
-            })
             resolve({
                 errorCode: 0,
                 message: 'Update information doctor success'
@@ -288,9 +305,37 @@ const getScheduleDoctorByDate = async ({ doctorId, date }) => {
     }
 }
 
+const getListDoctorsBySpecialtyId = async ({ specialtyId }) => {
+    try {
+        const res = await db.Markdown.findAll({
+            where: {
+                specialtyId
+            },
+            attributes: [],
+            include: [
+                { model: db.Clinic, attributes: ['doctorId'] },
+            ],
+            raw: true,
+            nest: true
+        });
+        return {
+            code: 0,
+            message: 'Get list doctors by specialty id successfully',
+            data: res
+        }
+    } catch (error) {
+        console.log(error);
+        return {
+            code: -1,
+            message: 'Something wrong form service!',
+            data: ''
+        }
+    }
+}
+
 export {
     getTopDoctorHome, getAllDoctor,
     createDetailDoctorService, getInfoDoctorById,
     updateDetailDoctorService, createDoctorSchedule,
-    getScheduleDoctorByDate
+    getScheduleDoctorByDate, getListDoctorsBySpecialtyId
 }

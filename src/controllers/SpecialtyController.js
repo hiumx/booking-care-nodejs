@@ -27,6 +27,20 @@ class SpecialtyController {
             next(error);
         }
     }
+    async getSpecialtyById(req, res, next) {
+        try {
+            const response = await SpecialtyService.getSpecialtyById(req.params);
+
+            res.status(201).json({
+                code: response.code,
+                message: response.message,
+                data: response.data
+            })
+        } catch (error) {
+            next(error);
+        }
+    }
+    
 }
 
 export default new SpecialtyController();

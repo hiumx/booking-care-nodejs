@@ -54,6 +54,20 @@ const updateDetailDoctor = async (req, res) => {
     }
 }
 
+const getListInfoDoctorsBySpecialtyId = async (req, res, next) => {
+    try {
+        const response = await doctorService.getListDoctorsBySpecialtyId(req.query);
+
+        res.status(201).json({
+            code: response.code,
+            message: response.message,
+            data: response.data
+        })
+    } catch (error) {
+        next(error);
+    }
+}
+
 
 
 const getInfoDoctorById = async (req, res) => {
@@ -111,5 +125,5 @@ module.exports = {
     getTopDoctorHome, getAllDoctor, 
     saveDetailDoctor, getInfoDoctorById, 
     updateDetailDoctor, createDoctorSchedule, 
-    getScheduleDoctorByDate
+    getScheduleDoctorByDate, getListInfoDoctorsBySpecialtyId
 }

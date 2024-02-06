@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       Booking.belongsTo(models.Allcode, {foreignKey: 'methodPaymentId', targetKey: 'keyMap', as: 'methodPaymentData'});
       Booking.belongsTo(models.Allcode, {foreignKey: 'priceId', targetKey: 'keyMap', as: 'priceDataBooking'});
       Booking.belongsTo(models.Allcode, {foreignKey: 'timeType', targetKey: 'keyMap', as: 'timeTypeData'});
-      Booking.belongsTo(models.Doctor, { foreignKey: 'doctorId' });
+      Booking.belongsTo(models.Clinic, { foreignKey: 'doctorId' });
       Booking.belongsTo(models.Patient, { foreignKey: 'patientId' });
 
     }

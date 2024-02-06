@@ -56,7 +56,7 @@ const getInfoTimeDetailById = async (timeIds) => {
 
 const getInfoClinicDoctor = async ({ id }) => {
     try {
-        const res = await db.Doctor.findOne({
+        const res = await db.Clinic.findOne({
             where: {
                 doctorId: +id
             },
@@ -79,7 +79,7 @@ const getInfoClinicDoctor = async ({ id }) => {
 
 const getDoctorClinicDetail = async ({ id }) => {
     try {
-        const res = await db.Doctor.findOne({
+        const res = await db.Clinic.findOne({
             where: {
                 doctorId: +id
             },
