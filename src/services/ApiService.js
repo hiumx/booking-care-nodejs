@@ -60,7 +60,8 @@ const getInfoClinicDoctor = async ({ id }) => {
             where: {
                 doctorId: +id
             },
-            raw: true
+            raw: true,
+            nest: true
         });
         return {
             message: 'Get information doctor clinic successfully',

@@ -5,8 +5,8 @@ const getTopDoctorHome = async (req, res) => {
     if (!limit) limit = 10;
     try {
         const response = await doctorService.getTopDoctorHome(+limit)
-        res.status(200).json(response)
-    } catch (error) {
+        return res.status(200).json(response);
+    } catch (error) {nvm
         console.log(error);
         res.status(200).json({
             errorCode: -1,
@@ -17,8 +17,8 @@ const getTopDoctorHome = async (req, res) => {
 
 const getAllDoctor = async (req, res) => {
     try {
-        const doctors = await doctorService.getAllDoctor()
-        res.status(200).json(doctors)
+        const doctors = await doctorService.getAllDoctor();
+        return res.status(200).json(doctors);
     } catch (error) {
         console.log(error);
         res.status(200).json({

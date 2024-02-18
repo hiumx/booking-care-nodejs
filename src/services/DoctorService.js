@@ -6,32 +6,45 @@ import { sendEmailSimple } from './EmailService';
 
 dotenv.config();
 
-const getTopDoctorHome = (limit) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            const dataUser = await db.User.findAll({
-                limit: limit,
-                where: { roleId: 'R2' },
-                order: [['createdAt', 'DESC']],
-                attributes: {
-                    exclude: ['password']
-                },
-                include: [
-                    { model: db.Allcode, as: 'positionData', attributes: ['valueEn', 'valueVi'] },
-                    { model: db.Allcode, as: 'genderData', attributes: ['valueEn', 'valueVi'] },
-                    { model: db.Clinic, attributes: ['nameClinic', 'addressClinic'] },
-                ],
-                raw: true,
-                nest: true
-            })
-            resolve({
-                errorCode: 0,
-                dataUser: dataUser
-            })
-        } catch (error) {
-            reject(error)
+const getTopDoctorHome = async (limit) => {
+    try {
+        let dataUser = await db.User.findAll({
+            limit: limit,
+            where: { roleId: 'R2' },
+            include: [
+                { model: db.Allcode, as: 'positionData', attributes: ['valueEn', 'valueVi'] },
+                { model: db.Allcode, as: 'genderData', attributes: ['valueEn', 'valueVi'] },
+            ],
+            order: [['createdAt', 'DESC']],
+            attributes: {
+                exclude: ['password']
+            },
+            raw: true,
+            nest: true
+        });
+
+        dataUser = dataUser.map((user) => {
+            let binImage;
+            if (user.image) {
+                binImage = Buffer.from(user.image, 'base64').toString('binary');
+                user.image = binImage;
+            };
+            return {
+                ...user,
+                image: binImage
+            }
+        });
+
+        return {
+            errorCode: 0,
+            dataUser
         }
-    })
+    } catch (error) {
+        console.log(error);
+        return {
+            errorCode: -1
+        }
+    }
 }
 
 
@@ -39,17 +52,43 @@ const getTopDoctorHome = (limit) => {
 const getAllDoctor = () => {
     return new Promise(async (resolve, reject) => {
         try {
-            const doctorsData = await db.User.findAll({
+            let doctorsData = await db.User.findAll({
                 where: {
                     roleId: 'R2',
                 },
                 attributes: {
-                    exclude: ['password', 'image']
+                    exclude: ['password']
+                },
+                include: [
+                    {
+                        model: db.Markdown,
+                        attributes: ['specialtyId', 'clinicId'],
+                        include: [{ model: db.Specialty, attributes: ['name']}]
+                    },
+                    {
+                        model: db.Allcode,
+                        as: 'positionData',
+                        attributes: ['valueEn', 'valueVi']
+                    }
+                ],
+                raw: true,
+                nest: true
+            });
+
+            doctorsData = doctorsData.map(doctor => {
+                let imageBase64;
+                if (doctor?.image) {
+                    imageBase64 = Buffer.from(doctor.image, 'base64').toString('binary');
                 }
-            })
+                return {
+                    ...doctor,
+                    image: imageBase64
+                }
+            });
+
             resolve({
                 errorCode: 0,
-                doctorsData: doctorsData
+                doctorsData
             })
         } catch (error) {
             reject(error)
@@ -196,7 +235,8 @@ const getInfoDoctorById = (inputId) => {
                     },
                     raw: false,
                     nest: true
-                })
+                });
+
                 let imageBase64;
                 if (data.image) {
                     imageBase64 = Buffer.from(data.image, 'base64').toString('binary');
