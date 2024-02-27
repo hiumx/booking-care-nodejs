@@ -4,7 +4,7 @@ import { sendEmailSimple } from "./EmailService";
 import { v4 as uuidv4 } from 'uuid';
 
 class PatientService {
-    static async bookingSchedule({dataBookingPatient}) {
+    static async bookingSchedule({ dataBookingPatient }) {
         try {
             const {
                 doctorId, doctorName, timeSpecific, patientName, patientGender, patientEmail,
@@ -40,7 +40,7 @@ class PatientService {
                     }
                 }
             }
-            if(!patient) {
+            if (!patient) {
                 patient = await db.Patient.create({
                     name: patientName,
                     gender: patientGender,
@@ -53,7 +53,7 @@ class PatientService {
 
             const token = uuidv4();
 
-            if(patient) {
+            if (patient) {
                 const booking = await db.Booking.create({
                     statusId: 'S1',
                     objectExamine,
@@ -67,7 +67,7 @@ class PatientService {
                     verifyToken: token
                 });
 
-                if(booking) {
+                if (booking) {
                     await sendEmailSimple({
                         doctorId,
                         namePatient: patient.name,
@@ -93,9 +93,9 @@ class PatientService {
             }
         }
     }
-    static async verifySchedule({token, doctorId}) {
+    static async verifySchedule({ token, doctorId }) {
         try {
-            if(!token || !doctorId) {
+            if (!token || !doctorId) {
                 return {
                     code: -3,
                     message: 'Missing parameter!',
@@ -109,14 +109,15 @@ class PatientService {
                 },
                 raw: false
             });
-            if(!scheduleExist) {
+
+            if (!scheduleExist) {
                 return {
                     code: -4,
                     message: 'Schedule does not exist!',
                     data: ''
                 }
             }
-            if(scheduleExist && scheduleExist.statusId === 'S1') {
+            if (scheduleExist && scheduleExist.statusId === 'S1') {
                 scheduleExist.statusId = 'S2';
                 await scheduleExist.save();
                 return {
@@ -124,8 +125,8 @@ class PatientService {
                     message: 'Confirmed schedule patient successfully.',
                     data: ''
                 }
-            } 
-            if(scheduleExist && scheduleExist.statusId === 'S2') {
+            }
+            if (scheduleExist && scheduleExist.statusId === 'S2') {
                 return {
                     code: -5,
                     message: 'Schedule have been confirmed!',

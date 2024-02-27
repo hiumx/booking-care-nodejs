@@ -134,9 +134,6 @@ const createDetailDoctorService = (
                 }
             });
 
-            console.log(clinic);
-
-
             await db.Markdown.create({
                 contentMarkdown,
                 contentHTML,

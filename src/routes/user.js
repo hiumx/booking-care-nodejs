@@ -6,9 +6,11 @@ import * as markdownController from '../controllers/MarkdownController';
 
 import patientRoutes from './patient';
 import specialtyRoutes from './specialty';
+import enterpriseRoutes from './enterprise';
 
 router.use('/patient', patientRoutes);
 router.use('/specialty', specialtyRoutes);
+router.use('/enterprise', enterpriseRoutes);
 
 router.post('/login', apiController.handleLogin)
 router.get('/users', apiController.handleGetUsers)
