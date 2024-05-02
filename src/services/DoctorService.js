@@ -1,8 +1,8 @@
 const db = require('../models/index');
 import dotenv from 'dotenv';
 import { Op, Sequelize } from 'sequelize';
-import _ from 'lodash';
-import { sendEmailSimple } from './EmailService';
+import _, { includes } from 'lodash';
+import { sendEmailConfirmAppointment, sendEmailSimple } from './EmailService';
 
 dotenv.config();
 
@@ -63,7 +63,7 @@ const getAllDoctor = () => {
                     {
                         model: db.Markdown,
                         attributes: ['specialtyId', 'clinicId'],
-                        include: [{ model: db.Specialty, attributes: ['name']}]
+                        include: [{ model: db.Specialty, attributes: ['name'] }]
                     },
                     {
                         model: db.Allcode,
@@ -342,6 +342,47 @@ const getScheduleDoctorByDate = async ({ doctorId, date }) => {
     }
 }
 
+const getAppointmentByDate = async ({ doctorId, date }) => {
+    const dateFormat = new Date(date).getTime();
+    try {
+        const listAppoint = await db.Booking.findAll({
+            where: {
+                doctorId,
+                date: dateFormat,
+                [Op.or]: [{ statusId: 'S2' }, { statusId: 'S3' }]
+            },
+            attributes: ['id', 'statusId'],
+            include: [
+                {
+                    model: db.Patient,
+                    attributes: ['name', 'address'],
+                    include: [{ model: db.Allcode, as: 'genderDataPatient', attributes: ['valueVi', 'valueEn'] }]
+                },
+                {
+                    model: db.Allcode,
+                    as: 'timeTypeData',
+                    attributes: ['valueVi', 'valueEn']
+                },
+
+            ],
+            raw: true,
+            nest: true
+        });
+        return {
+            message: 'Get doctor schedule existed successfully',
+            code: 0,
+            data: listAppoint
+        }
+    } catch (error) {
+        console.log(error);
+        return {
+            message: 'Something wrong from server!',
+            code: -1,
+            data: ''
+        }
+    }
+}
+
 const getListDoctorsBySpecialtyId = async ({ specialtyId }) => {
     try {
         const res = await db.Markdown.findAll({
@@ -370,9 +411,81 @@ const getListDoctorsBySpecialtyId = async ({ specialtyId }) => {
     }
 }
 
+const confirmAppointment = async ({ doctorId, bookingId }) => {
+    try {
+
+        if (!bookingId || !doctorId) {
+            return {
+                code: -3,
+                message: 'Missing parameter!',
+                data: ''
+            }
+        }
+
+        const appointmentExist = await db.Booking.findOne({
+            where: {
+                doctorId,
+                id: bookingId
+            },
+            raw: false
+        });
+
+        if (!appointmentExist) {
+            return {
+                code: -4,
+                message: 'Appointment does not exist!',
+                data: ''
+            }
+        }
+
+        const data = await db.Booking.findOne({
+            where: {
+                doctorId,
+                id: bookingId
+            },
+            attributes: ['date', 'timeType'],
+            include: [
+                { model: db.Patient, attributes: ['name', 'email'] },
+                { model: db.User, attributes: ['firstName', 'lastName'] },
+                { model: db.Allcode, as: 'timeTypeData', attributes: ['valueVi', 'valueEn'] },
+            ],
+            raw: true,
+            nest: true 
+        });
+
+        if (appointmentExist?.statusId === 'S2') {
+            appointmentExist.statusId = 'S3';
+            await appointmentExist.save();
+
+
+            await sendEmailConfirmAppointment({
+                namePatient: data.Patient.name,
+                nameDoctor: `${data.User.lastName} ${data.User.firstName}`,
+                emailPatient: data.Patient.email,
+                dateAppointment: new Date(data.date).toISOString(),
+                time: data.timeTypeData.valueVi
+            })
+
+            return {
+                code: 0,
+                message: 'Confirmed appointment by doctor successfully.',
+                data: ''
+            }
+        }
+
+    } catch (error) {
+        console.log(error);
+        return {
+            code: -1,
+            message: 'Something wrong form service!',
+            data: ''
+        }
+    }
+}
 export {
     getTopDoctorHome, getAllDoctor,
     createDetailDoctorService, getInfoDoctorById,
     updateDetailDoctorService, createDoctorSchedule,
-    getScheduleDoctorByDate, getListDoctorsBySpecialtyId
+    getScheduleDoctorByDate, getListDoctorsBySpecialtyId,
+    getAppointmentByDate, confirmAppointment
 }

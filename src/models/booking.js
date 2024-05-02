@@ -10,12 +10,13 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Booking.belongsTo(models.Allcode, {foreignKey: 'statusId', targetKey: 'keyMap', as: 'statusData'});
-      Booking.belongsTo(models.Allcode, {foreignKey: 'methodPaymentId', targetKey: 'keyMap', as: 'methodPaymentData'});
-      Booking.belongsTo(models.Allcode, {foreignKey: 'priceId', targetKey: 'keyMap', as: 'priceDataBooking'});
-      Booking.belongsTo(models.Allcode, {foreignKey: 'timeType', targetKey: 'keyMap', as: 'timeTypeData'});
+      Booking.belongsTo(models.Allcode, { foreignKey: 'statusId', targetKey: 'keyMap', as: 'statusData' });
+      Booking.belongsTo(models.Allcode, { foreignKey: 'methodPaymentId', targetKey: 'keyMap', as: 'methodPaymentData' });
+      Booking.belongsTo(models.Allcode, { foreignKey: 'priceId', targetKey: 'keyMap', as: 'priceDataBooking' });
+      Booking.belongsTo(models.Allcode, { foreignKey: 'timeType', targetKey: 'keyMap', as: 'timeTypeData' });
       Booking.belongsTo(models.Clinic, { foreignKey: 'doctorId' });
       Booking.belongsTo(models.Patient, { foreignKey: 'patientId' });
+      Booking.belongsTo(models.User, { foreignKey: 'doctorId' });
 
     }
   }

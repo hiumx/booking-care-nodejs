@@ -13,7 +13,6 @@ class PatientService {
             } = dataBookingPatient;
             let patient = null;
 
-
             patient = await db.Patient.findOne({
                 where: {
                     email: patientEmail,

@@ -121,9 +121,48 @@ const getScheduleDoctorByDate = async (req, res) => {
     }
 }
 
+const getAppointmentByDate = async (req, res) => {
+
+    try {
+        const response = await doctorService.getAppointmentByDate(req.query);
+        return res.status(200).json({
+            message: response.message,
+            code: response.code,
+            data: response.data
+        })
+    } catch (error) { 
+        console.log(error);
+        res.status(500).json({
+            message: 'Something wrong from server!',
+            errorCode: -2,
+            data: ''
+        })
+    }
+}
+
+const confirmAppointment = async (req, res) => {
+
+    try {
+        const response = await doctorService.confirmAppointment(req.body);
+        return res.status(200).json({
+            message: response.message,
+            code: response.code,
+            data: response.data
+        })
+    } catch (error) { 
+        console.log(error);
+        res.status(500).json({
+            message: 'Something wrong from server!',
+            errorCode: -2,
+            data: ''
+        })
+    }
+}
+
 module.exports = {
     getTopDoctorHome, getAllDoctor, 
     saveDetailDoctor, getInfoDoctorById, 
     updateDetailDoctor, createDoctorSchedule, 
-    getScheduleDoctorByDate, getListInfoDoctorsBySpecialtyId
+    getScheduleDoctorByDate, getListInfoDoctorsBySpecialtyId,
+    getAppointmentByDate, confirmAppointment
 }

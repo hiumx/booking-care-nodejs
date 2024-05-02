@@ -10,6 +10,8 @@ router.patch('/save-detail-doctor', doctorController.updateDetailDoctor);
 router.get('/info-doctor', doctorController.getInfoDoctorById);
 router.post('/doctor-schedule', doctorController.createDoctorSchedule);
 router.get('/doctor-schedule', doctorController.getScheduleDoctorByDate);
+router.get('/appointment-schedule', doctorController.getAppointmentByDate);
+router.post('/confirm-appointment', doctorController.confirmAppointment);
 
 router.get('/', doctorController.getListInfoDoctorsBySpecialtyId);
 

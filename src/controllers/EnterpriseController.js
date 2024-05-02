@@ -1,6 +1,6 @@
 'use strict';
 
-import EnterpriseService from "../services/enterprise.service";
+import EnterpriseService from "../services/EnterpriseService";
 
 class EnterpriseController {
     async getAllBenefitsDigitalConversions(req, res, next) {
