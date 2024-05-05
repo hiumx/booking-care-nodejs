@@ -21,10 +21,10 @@ module.exports = {
         allowNull: false,
       },
       description: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(512)
       },
       features: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(2048),
         allowNull: false,
       },
       intendedFor: {

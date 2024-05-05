@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+  db: 
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      - MYSQL_DATABASE=booking-care
+      - MYSQL_ROOT_PASSWORD=123456
+    volumes:
+      - mysql_bc:/var/lib/mysql
+    ports:
+      - '3307:3306'
+    expose:
+      - '3306'
+
+  be: 
+    # image: hiumx/booking-care-be
+    depends_on:
+      - db
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      - DB_PORT=3306
+      - DB_HOST=db
+      - DB_USERNAME=root
+      - DB_PASSWORD=123456
+      - DB_NAME=booking-care
+      # - DB_HOST=host.docker.internal
+    ports:
+      - 8080:8080
+
+volumes:
+  mysql_bc:

@@ -13,7 +13,7 @@ const app = express();
 app.use(function (req, res, next) {
 
     // Website you wish to allow to connect
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.setHeader('Access-Control-Allow-Origin', process.env.URL_REACT);
 
     // Request methods you wish to allow
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
@@ -38,10 +38,11 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 app.use(methodOverride('_method'));
 
+connectDB();
+
 configViewEngine(app);
 routes(app);
 
-connectDB();
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)

@@ -1,5 +1,5 @@
 const db = require('../models/index');
-const CRUDservice = require('../services/CRUDService');
+const CRUDservice = require('../services/CRUDservice');
 
 const getHomePage = async (req, res) => {
     try {

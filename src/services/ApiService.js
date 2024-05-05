@@ -85,7 +85,7 @@ const getDoctorClinicDetail = async ({ id }) => {
                 doctorId: +id
             },
             attributes: {
-                exclude: ['id', 'doctorId', 'priceId', 'provinceId', 'paymentId']
+                exclude: ['doctorId', 'priceId', 'provinceId', 'paymentId']
             },
             include: [
                 { model: db.Allcode, as: 'provinceData', attributes: ['valueEn', 'valueVi'] },
@@ -95,6 +95,7 @@ const getDoctorClinicDetail = async ({ id }) => {
             raw: true,
             nest: true
         });
+
         return {
             message: 'Get doctor clinic detail successfully',
             code: 0,

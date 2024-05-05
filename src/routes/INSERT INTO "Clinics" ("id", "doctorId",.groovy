@@ -1,0 +1,11 @@
+INSERT INTO "Clinics" ("id", "doctorId", "priceId", "provinceId", "paymentId", "addressClinic", "nameClinic", "note", "count", "createdAt", "updatedAt") VALUES
+(1, 58, '25', '34', '32', 'Phòng 401, Tầng 4, Tòa nhà An Bình, số 3 đường Trần Nguyên Đán, khu đô thị mới Định Công, quận Hoàng Mai', 'Phòng khám Tâm Phúc', 'Phòng khám Tâm Phúc', NULL, '2024-02-05 18:21:28', '2024-02-05 18:21:28'),
+(2, 59, '27', '35', '33', '20-22 Dương Quang Trung, Phường 12, Quận 10', 'Phòng khám Bệnh viện Đại học Y Dược 1', 'Phòng khám Bệnh viện Đại học Y Dược 1', NULL, '2024-02-05 18:30:55', '2024-02-05 18:30:55'),
+(4, 62, '28', '35', '33', 'Đường Số 17A, Bình Trị Đông B, Bình Tân', 'Bệnh viện Quốc tế City', 'Bệnh viện Quốc tế City', NULL, '2024-02-05 18:42:27', '2024-02-05 18:42:27'),
+(5, 61, '27', '35', '31', '171 Đường Trường Chinh, Phường Tân Thới Nhất, Quận 12', 'Bệnh viện Đa khoa Tâm Trí Sài Gòn', 'Bệnh viện Đa khoa Tâm Trí Sài Gòn', NULL, '2024-02-05 19:09:50', '2024-02-05 19:09:50'),
+(6, 65, '26', '35', '32', 'Số 722 Sư Vạn Hạnh, phường 12, Quận 10', 'Bệnh viện STO Phương Đông', 'Số 722 Sư Vạn Hạnh, phường 12, Quận 10', NULL, '2024-02-05 19:10:57', '2024-02-05 19:10:57'),
+(7, 65, '26', '35', '32', 'Số 722 Sư Vạn Hạnh, phường 12, Quận 10', 'Phòng khám Quốc tế EXSON', 'Số 722 Sư Vạn Hạnh, phường 12, Quận 10', NULL, '2024-02-05 19:11:21', '2024-02-05 19:11:21'),
+(8, 63, '27', '35', '32', '79 Thành Thái, Phường 14, Quận 10', 'Bệnh viện STO Phương Đông', 'Bệnh viện STO Phương Đông', NULL, '2024-02-05 19:15:29', '2024-02-05 19:15:29'),
+(9, 64, '26', '34', '33', 'Tòa nhà HDI Tower, Số 55 đường Lê Đại Hành, Quận Hai Bà Trưng', 'Phòng Khám ACC - Chiropractic Hà Nội', 'Phòng Khám ACC - Chiropractic Hà Nội', NULL, '2024-02-05 19:19:35', '2024-02-05 19:19:35'),
+(11, 60, '26', '35', '32', 'Số 722 Sư Vạn Hạnh, phường 12, Quận 10', 'Bệnh viện Đa khoa Tâm Trí Sài Gòn', 'Nguyên Giám đốc Trung tâm Chăm sóc hô hấp – Bệnh viện Đại học Y dược TP.HCM', NULL, '2024-02-18 13:15:05', '2024-02-18 13:15:05'),
+(12, 71, '28', '35', '31', 'Toà nhà Richstar 2 - RS5, 239-241 đường Hòa Bình, P. Hiệp Tân, Q.Tân Phú', 'Phòng khám Đa khoa SIM Medical Center', '', NULL, '2024-02-18 13:19:17', '2024-02-18 13:19:17');

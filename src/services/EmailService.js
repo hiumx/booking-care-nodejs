@@ -1,8 +1,7 @@
 'use strict';
 import nodemailer from 'nodemailer';
-import dotenv from 'dotenv';
 import moment from 'moment';
-dotenv.config();
+require('dotenv').config();
 
 export const sendEmailSimple = async ({ doctorId, namePatient, emailPatient, nameDoctor, dateAppointment, time, verifyToken }) => {
 
@@ -28,7 +27,7 @@ export const sendEmailSimple = async ({ doctorId, namePatient, emailPatient, nam
         <p>Bác sĩ: <b>${nameDoctor}</b></p>
         <p>Thời gian: <b>${time}</b></p>
         <p>Ngày: <b>${moment(dateAppointment).format('DD/MM/YYYY')}</b></p>
-        <p>Vui lòng click vào <i><a href='${process.env.URL_REACT_APP}/verify-schedule?token=${verifyToken}&doctorId=${doctorId}' target="_blank">đây</a></i> để xác nhận để xác nhận thông tin lịch khám.</p>
+        <p>Vui lòng click vào <i><a href='${process.env.URL_REACT}/verify-schedule?token=${verifyToken}&doctorId=${doctorId}' target="_blank">đây</a></i> để xác nhận để xác nhận thông tin lịch khám.</p>
         <p>Xin cảm ơn!</p>
       </div>`, // html body
     });
