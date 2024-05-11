@@ -14,7 +14,7 @@ let sequelize;
 
 const customizeConfig = {
   host: process.env.DB_HOST,
-  port: '3306',
+  port: '3308',
   // port: '3307',
   dialect: process.env.DB_DIALECT,
   logging: false,
